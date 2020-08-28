@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import PropTypes from "prop-types";
+const mediaUrl = "http://media.mw.metropolia.fi/wbma/uploads/";
 
 const ListItem = ({ singleMedia }) => {
   const [modalVisible, setModalVisible] = useState(true);
@@ -21,10 +22,10 @@ const ListItem = ({ singleMedia }) => {
         <TouchableOpacity>
           <Image
             style={{ flex: 1, width: 200, height: 200 }}
-            source={{ uri: singleMedia.thumbnails.w160 }}
+            source={{ uri: mediaUrl + promps.singleMedia.thumbnails.w160 }}
           />
           <View style={{ flex: 2, marginHorizontal: 20 }}>
-            <Text style={styles.titleText}>{singleMedia.title}</Text>
+            <Text style={styles.titleText}>{props.singleMedia.title}</Text>
             <Text>{singleMedia.description}</Text>
           </View>
         </TouchableOpacity>
