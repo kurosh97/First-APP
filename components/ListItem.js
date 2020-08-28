@@ -15,16 +15,12 @@ const ListItem = ({ singleMedia }) => {
   return (
     <View>
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World</Text>
-          </View>
-        </View>
+        <View style={styles.centeredView}></View>
       </Modal>
       <View style={styles.gridItem}>
         <TouchableOpacity>
           <Image
-            style={{ flex: 1, width: 100, height: 100 }}
+            style={{ flex: 1, width: 200, height: 200 }}
             source={{ uri: singleMedia.thumbnails.w160 }}
           />
           <View style={{ flex: 2, marginHorizontal: 20 }}>
@@ -44,6 +40,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontWeight: "bold",
+    fontSize: 40,
   },
   centeredView: {
     flex: 1,
