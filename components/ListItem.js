@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import {
+  Dimensions,
   StyleSheet,
-  Modal,
   Text,
   View,
   TouchableOpacity,
@@ -10,54 +10,34 @@ import {
 import PropTypes from "prop-types";
 
 const ListItem = ({ singleMedia }) => {
-  const [modalVisible, setModalVisible] = useState(true);
-
   return (
-    <View>
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World</Text>
-          </View>
-        </View>
-      </Modal>
+    <TouchableOpacity>
       <View style={styles.gridItem}>
-        <TouchableOpacity>
+        <View style={styles.imageBox}>
           <Image
-            style={{ flex: 1, width: 100, height: 100 }}
+            style={styles.image}
             source={{ uri: singleMedia.thumbnails.w160 }}
           />
-          <View style={{ flex: 2, marginHorizontal: 20 }}>
-            <Text style={styles.titleText}>{singleMedia.title}</Text>
-            <Text>{singleMedia.description}</Text>
-          </View>
-        </TouchableOpacity>
+        </View>
+        <View style={styles.textBox}>
+          <Text style={styles.titleText}>{singleMedia.title}</Text>
+          <Text>{singleMedia.description}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   gridItem: {
-    backgroundColor: "#D3D3D3",
-    marginVertical: 2,
-  },
-  titleText: {
-    fontWeight: "bold",
-  },
-  centeredView: {
-    flex: 1,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    flexDirection: "row",
+    backgroundColor: "#FFE4C4",
+    marginVertical: 10,
+    shadowColor: "#F5F5DC",
+
     shadowOffset: {
       width: 0,
       height: 2,
@@ -66,9 +46,28 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  imageBox: {
+    width: Dimensions.get("window").width * 0.2,
+    height: Dimensions.get("window").width * 0.2,
+    borderRadius: (Dimensions.get("window").width * 0.5) / 2,
+    borderWidth: 3,
+    borderColor: "black",
+    overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  textBox: {
+    padding: 5,
+    flexDirection: "column",
+    width: "60%",
+  },
+  titleText: {
+    fontSize: 30,
+    color: "#A52A2A",
+    paddingVertical: 10,
+    fontWeight: "bold",
   },
 });
 

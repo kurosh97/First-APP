@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { FlatList } from "react-native";
 import ListItem from "./ListItem";
 
 const mediaArray = [
@@ -16,7 +9,7 @@ const mediaArray = [
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sodales enim eget leo condimentum vulputate. Sed lacinia consectetur fermentum. Vestibulum lobortis purus id nisi mattis posuere. Praesent sagittis justo quis nibh ullamcorper, eget elementum lorem consectetur. Pellentesque eu consequat justo, eu sodales eros.",
     thumbnails: {
-      w160: "http://placekitten.com/160/161",
+      w160: "http://placekitten.com/g/200/300",
     },
     filename: "http://placekitten.com/2048/1920",
   },
