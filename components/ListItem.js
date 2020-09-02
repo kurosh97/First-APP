@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   StyleSheet,
@@ -64,3 +63,4 @@ ListItem.propTypes = {
 };
 
 export default ListItem;
+

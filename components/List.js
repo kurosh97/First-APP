@@ -4,31 +4,10 @@ import {
 } from 'react-native';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-
-const url = 'http://media.mw.metropolia.fi/wbma/';
+import {useLoadMedia} from '../hooks/APIhooks';
 
 const List = ({navigation}) => {
-  const [mediaArray, setMediaArray] = useState([]);
-
-  useEffect(() => {
-    const loadMedia = async () => {
-      try {
-        const response = await fetch(url + 'media');
-        const json = await response.json();
-        const media = await Promise.all(json.map(async (item) => {
-          const resp2 = await fetch(url + 'media/' + item.file_id);
-          const json2 = await resp2.json();
-          return json2;
-        }));
-        console.log('loadMedia', media);
-        setMediaArray(media);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    loadMedia();
-  }, []);
+  const mediaArray = useLoadMedia();
 
   return (
     <FlatList

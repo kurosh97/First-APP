@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const Single = ({route}) => {
-  console.log('route', route);
   const {file} = route.params;
+  console.log('kuva', mediaUrl + file.filename);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>{file.title}</Text>
