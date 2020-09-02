@@ -1,6 +1,9 @@
 module.exports = {
   parser: 'babel-eslint',
   env: {
+    commonjs: true,
+    es6: true,
+    node: true,
     browser: true,
     es2020: true,
   },
@@ -18,6 +21,10 @@ module.exports = {
   },
   plugins: ['react', 'react-native'],
   rules: {
+    'indent': ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'never'],
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'no-console': 0,
@@ -46,4 +53,4 @@ module.exports = {
       {name: 'Link', linkAttribute: 'to'},
     ],
   },
-};
+}
