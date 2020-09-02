@@ -15,7 +15,7 @@ const ListItem = ({navigation, singleMedia}) => {
   return (
     <TouchableOpacity style={styles.row} onPress={
       () => {
-        navigation.navigate('Single');
+        navigation.navigate('Single', {file: singleMedia});
       }
     }>
       <View style={styles.imagebox}>
