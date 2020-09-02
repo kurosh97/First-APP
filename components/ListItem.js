@@ -1,83 +1,66 @@
-import React, {useState} from 'react'
+
+import React from 'react';
 import {
-  Dimensions,
   StyleSheet,
   Text,
-  View, TouchableOpacity,
-} from 'react-native'
-import PropTypes from 'prop-types'
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import PropTypes from 'prop-types';
 
-import Urls from '../constants/urls'
-import Colors from '../constants/colors'
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-import AsyncImage from './AsyncImage'
-
-const ListItem = ({singleMedia, navigation}) => {
+const ListItem = ({navigation, singleMedia}) => {
   return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Single',
-        {singleMedia})}
-    >
-      <View style={styles.gridItem}>
-        <View style={styles.imageBox}>
-          <AsyncImage
-            style={{
-              borderRadius: 50,
-              height: 100,
-              width: 100,
-            }}
-            source={{uri: Urls.uploads + singleMedia.filename}}
-            placeHolderColor="#b3e5fc"
-          />
-        </View>
-        <View style={styles.textBox}>
-          <Text style={styles.titleText}>{singleMedia.title}</Text>
-          <Text>{singleMedia.description}</Text>
-        </View>
+    <TouchableOpacity style={styles.row} onPress={
+      () => {
+        navigation.navigate('Single');
+      }
+    }>
+      <View style={styles.imagebox}>
+        <Image
+          style={styles.image}
+          source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
+        />
+      </View>
+      <View style={styles.textbox}>
+        <Text style={styles.listTitle}>{singleMedia.title}</Text>
+        <Text>{singleMedia.description}</Text>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  gridItem: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  row: {
     flexDirection: 'row',
-    backgroundColor: '#D3D3D3',
-    marginVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0, height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    padding: 15,
+    marginBottom: 5,
+    backgroundColor: '#eee',
+    borderRadius: 16,
   },
-  imageBox: {
-    width: Dimensions.get('window').width * 0.3,
-    height: Dimensions.get('window').width * 0.3,
-    borderRadius: (Dimensions.get('window').width * 0.5) / 2,
-    borderWidth: 3,
-    borderColor: 'black',
-    overflow: 'hidden',
+  imagebox: {
+    flex: 1,
   },
-  textBox: {
+  image: {
+    flex: 1,
+    borderRadius: 16,
+  },
+  textbox: {
+    flex: 2,
     padding: 10,
-    flexDirection: 'column',
-    width: '60%%',
   },
-  titleText: {
-    fontSize: 24,
-    color: Colors.primary,
-    paddingVertical: 10,
+  listTitle: {
     fontWeight: 'bold',
+    fontSize: 20,
+    paddingBottom: 15,
   },
-})
+});
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
-}
+};
 
-export default ListItem
+export default ListItem;

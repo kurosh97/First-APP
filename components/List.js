@@ -1,54 +1,48 @@
-/* eslint-disable no-useless-catch */
-import React, {useState, useEffect} from 'react'
-import {FlatList} from 'react-native'
-import ListItem from './ListItem'
+import React, {useState, useEffect} from 'react';
+import {
+  FlatList,
+} from 'react-native';
+import ListItem from './ListItem';
+import PropTypes from 'prop-types';
 
-import PropTypes from 'prop-types'
+const url = 'http://media.mw.metropolia.fi/wbma/';
 
-/* const url =
-  'https://raw.githubusercontent.com/mattpe/wbma/master/docs/assets/test.json'
- */
-
-const url = 'http://media.mw.metropolia.fi/wbma/media/'
-const List = (props) => {
-  const [mediaArray, setMediaArray] = useState([])
-
-  const loadMedia = async () => {
-    const response = await fetch(url)
-    const json = await response.json()
-    console.log(json)
-
-    const result = await Promise.all(json.map(async (item) => {
-      const response = await fetch(url + item.file_id)
-      const json = await response.json()
-      return json
-    }))
-    setMediaArray(result)
-
-    console.log('RESULT', result)
-  }
+const List = ({navigation}) => {
+  const [mediaArray, setMediaArray] = useState([]);
 
   useEffect(() => {
-    try {
-      loadMedia()
-    } catch (error) {
-      throw error
-    }
-  }, [])
+    const loadMedia = async () => {
+      try {
+        const response = await fetch(url + 'media');
+        const json = await response.json();
+        const media = await Promise.all(json.map(async (item) => {
+          const resp2 = await fetch(url + 'media/' + item.file_id);
+          const json2 = await resp2.json();
+          return json2;
+        }));
+        console.log('loadMedia', media);
+        setMediaArray(media);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    loadMedia();
+  }, []);
+
   return (
     <FlatList
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) =>
-        <ListItem navigation={props.navigation}
-          singleMedia={item} />}
+        <ListItem singleMedia={item} navigation={navigation} />
+      }
     />
-  )
-}
+  );
+};
 
 List.propTypes = {
   navigation: PropTypes.object,
-}
+};
 
-
-export default List
+export default List;
