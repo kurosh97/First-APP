@@ -1,26 +1,53 @@
 import React from 'react';
-import {StyleSheet, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
+import {
+  Container,
+  Header,
+  Left,
+  Button,
+  Body,
+  Right,
+  Title,
+  Icon,
+  Content,
+} from 'native-base';
 
-const FormTextInput = ({style, ...otherProps}) => {
+const Layout = (props) => {
+  console.log('Layout', props);
+  const handleBackButtonClick = () => {
+    props.navigation.goBack(null);
+    return true;
+  };
   return (
-    <TextInput
-      style={[styles.textInput, style]}
-      {...otherProps}
-    />
+    <Container>
+      <Header>
+
+        <Left>
+          {props.backButton &&
+            <Button
+              transparent
+              onPress={handleBackButtonClick}
+            >
+              <Icon name='arrow-back' />
+            </Button>}
+
+        </Left>
+        <Body>
+          <Title>MyApp</Title>
+        </Body>
+        <Right></Right>
+      </Header>
+      <Content padder>
+        {props.children}
+      </Content>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  textInput: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-  },
-});
-
-FormTextInput.propTypes = {
-  style: PropTypes.object,
+Layout.propTypes = {
+  navigation: PropTypes.object,
+  children: PropTypes.any,
+  backButton: PropTypes.bool,
 };
 
-export default FormTextInput;
+export default Layout;
