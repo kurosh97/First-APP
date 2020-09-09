@@ -3,8 +3,6 @@
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
-    "eslint": "eslint .",
-    "debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001' && expo start",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
@@ -16,6 +14,7 @@
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
     "expo": "~38.0.8",
+    "expo-font": "~8.2.1",
     "expo-status-bar": "^1.0.2",
     "native-base": "^2.13.14",
     "react": "~16.11.0",
@@ -25,10 +24,7 @@
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
-    "react-native-web": "~0.11.7",
-    "react-redux": "^7.2.1",
-    "redux": "^4.0.5",
-    "expo-font": "~8.2.1"
+    "react-native-web": "~0.11.7"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
@@ -37,8 +33,7 @@
     "eslint": "^7.7.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-react-native": "^3.9.0",
-    "redux-devtools-extension": "^2.13.8"
+    "eslint-plugin-react-native": "^3.9.0"
   },
   "private": true
 }
