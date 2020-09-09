@@ -1,57 +1,53 @@
-import React, {useState} from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View, TouchableOpacity,
-  Image,
-  ActivityIndicator,
-} from 'react-native'
-import PropTypes from 'prop-types'
+  Container,
+  Header,
+  Left,
+  Button,
+  Body,
+  Right,
+  Title,
+  Icon,
+  Content,
+} from 'native-base';
 
-
-const AsyncImage = (props) => {
-  const [loaded, setLoaded] = useState(false)
-
-  const onLoad = () => {
-    setTimeout(() => {
-      setLoaded(true)
-    }, 1000)
-  }
-
-  const {placeholderColor, style, source} = props
+const Layout = (props) => {
+  console.log('Layout', props);
+  const handleBackButtonClick = () => {
+    props.navigation.goBack(null);
+    return true;
+  };
   return (
-    <View style={style}>
+    <Container>
+      <Header>
 
-      <Image
-        style={styles.image}
-        source={source}
-        onLoad={onLoad}
-      />
-      {!loaded &&
-        <View style={[style, {
+        <Left>
+          {props.backButton &&
+            <Button
+              transparent
+              onPress={handleBackButtonClick}
+            >
+              <Icon name='arrow-back' />
+            </Button>}
 
-          position: 'absolute',
-          justifyContent: 'center',
-        }]}>
-          <ActivityIndicator size="large" color={placeholderColor} />
-        </View>
-      }
-    </View>
-  )
-}
+        </Left>
+        <Body>
+          <Title>MyApp</Title>
+        </Body>
+        <Right></Right>
+      </Header>
+      <Content padder>
+        {props.children}
+      </Content>
+    </Container>
+  );
+};
 
-const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-})
+Layout.propTypes = {
+  navigation: PropTypes.object,
+  children: PropTypes.any,
+  backButton: PropTypes.bool,
+};
 
-AsyncImage.propTypes = {
-  placeholderColor: PropTypes.string,
-  style: PropTypes.object,
-  source: PropTypes.object,
-}
-
-export default AsyncImage
+export default Layout;

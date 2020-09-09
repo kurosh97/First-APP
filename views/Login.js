@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { AuthContext } from "../contexts/AuthContext";
-import AsyncStorage from "@react-native-community/async-storage";
+
 import { checkToken } from "../hooks/APIhooks";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";

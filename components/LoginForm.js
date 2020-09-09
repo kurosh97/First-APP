@@ -1,34 +1,32 @@
 import React, {useContext} from 'react';
-import PropTypes from 'prop-types';
-import {AuthContext} from '../contexts/AuthContext';
-import AsyncStorage from '@react-native-community/async-storage';
-// import {postLogIn} from '../hooks/APIhooks';
-import FormTextInput from './FormTextInput';
-import useSignUpForm from '../hooks/RegisterHooks';
-import {postRegistration, postLogIn} from '../hooks/APIhooks';
 import {
   Button,
   Text,
   Form,
 } from 'native-base';
+import PropTypes from 'prop-types';
+import {AuthContext} from '../contexts/AuthContext';
+import AsyncStorage from '@react-native-community/async-storage';
+import {postLogIn} from '../hooks/APIhooks';
+import FormTextInput from './FormTextInput';
+import useLoginForm from '../hooks/LoginHooks';
 
-const RegisterForm = ({navigation}) => {
-  const {setUser, setIsLoggedIn} = useContext(AuthContext);
+const LoginForm = ({navigation}) => {
+  const {setIsLoggedIn} = useContext(AuthContext);
 
-  const doRegister = async () => {
+  const doLogin = async () => {
     try {
-      const result = await postRegistration(inputs);
-      console.log('new user created:', result);
       const userData = await postLogIn(inputs);
-      await AsyncStorage.setItem('userToken', userData.token);
+      console.log('user login success:', userData);
       setIsLoggedIn(true);
-      setUser(userData);
+      await AsyncStorage.setItem('userToken', userData.token);
     } catch (e) {
-      console.log('registeration error', e.message);
+      console.log('login error', e.message);
     }
+    // navigation.navigate('Home');
   };
 
-  const {inputs, handleInputChange} = useSignUpForm();
+  const {handleInputChange, inputs} = useLoginForm();
 
   return (
     <Form>
@@ -43,25 +41,15 @@ const RegisterForm = ({navigation}) => {
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
       />
-      <FormTextInput
-        autoCapitalize="none"
-        placeholder="email"
-        onChangeText={(txt) => handleInputChange('email', txt)}
-      />
-      <FormTextInput
-        autoCapitalize="none"
-        placeholder="full name"
-        onChangeText={(txt) => handleInputChange('full_name', txt)}
-      />
-      <Button block onPress={doRegister}>
-        <Text>Register!</Text>
+      <Button block onPress={doLogin}>
+        <Text>Login!</Text>
       </Button>
     </Form>
   );
 };
 
-RegisterForm.propTypes = {
+LoginForm.propTypes = {
   navigation: PropTypes.object,
 };
 
-export default RegisterForm;
+export default LoginForm;
