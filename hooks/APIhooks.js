@@ -103,7 +103,7 @@ const checkAvailable = async (username) => {
     const resultData = await response.json();
     if (response.ok) {
       if (resultData.available) {
-        return '';
+        return null;
       } else {
         return 'Username ' + username + ' is not available.';
       }
@@ -114,8 +114,6 @@ const checkAvailable = async (username) => {
     throw new Error(e.message);
   }
 };
-
-
 
 export {
   useLoadMedia,
