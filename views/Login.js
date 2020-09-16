@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState, version} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';

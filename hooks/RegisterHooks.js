@@ -35,7 +35,7 @@ const constraints = {
   full_name: {
     length: {
       minimum: 3,
-      message: 'enter you full name',
+      message: 'minimum 3 characters',
     },
   },
 };
@@ -52,7 +52,20 @@ const useSignUpForm = (callback) => {
 
 
   const handleInputChange = (name, text) => {
-    // console.log(name, text);
+    // handle just input, no validation
+    // console.log('RegisterHooks.js', name, text);
+    setInputs((inputs) => {
+      return {
+        ...inputs,
+        [name]: text,
+      };
+    });
+  };
+
+  const handleInputEnd = (name, event) => {
+    // dis is for validation
+    // console.log('RegisterHooks.js', name, event.nativeEvent.text);
+    const text = event.nativeEvent.text;
     setInputs((inputs) => {
       return {
         ...inputs,
@@ -63,7 +76,7 @@ const useSignUpForm = (callback) => {
     if (name === 'confirmPassword') {
       error = validator(name, {
         password: inputs.password,
-        confirmPassword: inputs.confirmPassword,
+        confirmPassword: text,
       }, constraints);
     } else {
       error = validator(name, text, constraints);
@@ -78,15 +91,24 @@ const useSignUpForm = (callback) => {
   };
 
   const validateOnSend = () => {
+    const usernameError = validator('username', inputs.username, constraints);
+    const passwordError = validator('password', inputs.password, constraints);
+    const emailError = validator('email', inputs.email, constraints);
     const confirmError = validator('confirmPassword', {
       password: inputs.password,
-      confirmPassword: inputs.confirmPassword,
+      confirmPassword: inputs.confirm,
     }, constraints);
-    console.log('confirm pw error', confirmError);
+
+    const fullNameError = validator('full_name', inputs.full_name, constraints);
     setRegisterErrors((registerErrors) => ({
       ...registerErrors,
-      confirmPassword: confirmError,
+      username: usernameError,
+      password: passwordError,
+      email: emailError,
+      confirm: confirmError,
+      full_name: fullNameError,
     }));
+
 
     for (const val of Object.values(registerErrors)) {
       console.log('validation error: ', val);
@@ -100,6 +122,9 @@ const useSignUpForm = (callback) => {
   const checkUserAvailable = async (event) => {
     const username = event.nativeEvent.text;
     try {
+      if (!registerErrors.username) {
+        return;
+      }
       const result = await checkAvailable(username);
       setRegisterErrors((registerErrors) => ({
         ...registerErrors,
@@ -112,6 +137,7 @@ const useSignUpForm = (callback) => {
 
   return {
     handleInputChange,
+    handleInputEnd,
     validateOnSend,
     checkUserAvailable,
     inputs,
