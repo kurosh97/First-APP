@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Button, Container, Content, Form, Text} from 'native-base';
@@ -11,6 +12,22 @@ import * as Permissions from 'expo-permissions';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(null);
+
+  const doUpload = () => {
+    const formData = new FormData();
+    // lisätään tekstikentät formDataan
+    formData.append('title', inputs.title);
+    formData.append('description', inputs.description);
+
+    // lisätään tiedosto formDataan
+    const filename = image.split('/').pop();
+    const match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    if (type === 'image/jpg') type = 'image/jpeg';
+    formData.append('file', {uri: image, name: filename, type});
+
+    console.log('Upload', formData);
+  };
 
   const pickImage = async () => {
     try {
@@ -48,6 +65,7 @@ const Upload = ({navigation}) => {
   const {
     handleInputChange,
     uploadErrors,
+    inputs,
   } = useUploadForm();
 
 
@@ -77,7 +95,7 @@ const Upload = ({navigation}) => {
         <Button block onPress={pickImage}>
           <Text>Choose file</Text>
         </Button>
-        <Button block>
+        <Button block onPress={doUpload}>
           <Text>Upload</Text>
         </Button>
       </Content>
