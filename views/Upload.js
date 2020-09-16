@@ -1,32 +1,33 @@
+/* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import {Button, Container, Content, Form, Text} from 'native-base';
-import FormTextInput from '../components/FormTextInput';
-import {Image, Platform} from 'react-native';
-import useUploadForm from '../hooks/UploadHooks';
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { Button, Container, Content, Form, Text } from "native-base";
+import FormTextInput from "../components/FormTextInput";
+import { Image, Platform } from "react-native";
+import useUploadForm from "../hooks/UploadHooks";
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import AsyncStorage from "@react-native-community/async-storage";
 
-
-const Upload = ({navigation}) => {
+const Upload = ({ navigation }) => {
   const [image, setImage] = useState(null);
 
-  const doUpload = () => {
+  const doUpload = async () => {
     const formData = new FormData();
     // lisätään tekstikentät formDataan
-    formData.append('title', inputs.title);
-    formData.append('description', inputs.description);
+    formData.append("title", inputs.title);
+    formData.append("description", inputs.description);
 
     // lisätään tiedosto formDataan
-    const filename = image.split('/').pop();
+    const filename = image.split("/").pop();
     const match = /\.(\w+)$/.exec(filename);
     let type = match ? `image/${match[1]}` : `image`;
-    if (type === 'image/jpg') type = 'image/jpeg';
-    formData.append('file', {uri: image, name: filename, type});
-
-    console.log('Upload', formData);
+    if (type === "image/jpg") type = "image/jpeg";
+    formData.append("file", { uri: image, name: filename, type });
+    const resp = await AsyncStorage.getItem("userToken");
+    console.log("Upload", formData);
   };
 
   const pickImage = async () => {
@@ -48,11 +49,11 @@ const Upload = ({navigation}) => {
   };
 
   const getPermissionAsync = async () => {
-    if (Platform.OS !== 'web') {
-      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      console.log('status', status);
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
+    if (Platform.OS !== "web") {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      console.log("status", status);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
       }
     }
   };
@@ -61,34 +62,28 @@ const Upload = ({navigation}) => {
     getPermissionAsync();
   }, []);
 
-
-  const {
-    handleInputChange,
-    uploadErrors,
-    inputs,
-  } = useUploadForm();
-
+  const { handleInputChange, uploadErrors, inputs } = useUploadForm();
 
   return (
     <Container>
       <Content padder>
-        {image &&
+        {image && (
           <Image
-            source={{uri: image}}
-            style={{height: 400, width: null, flex: 1}}
+            source={{ uri: image }}
+            style={{ height: 400, width: null, flex: 1 }}
           />
-        }
+        )}
         <Form>
           <FormTextInput
             autoCapitalize="none"
             placeholder="title"
-            onChangeText={(txt) => handleInputChange('title', txt)}
+            onChangeText={(txt) => handleInputChange("title", txt)}
             error={uploadErrors.title}
           />
           <FormTextInput
             autoCapitalize="none"
             placeholder="description"
-            onChangeText={(txt) => handleInputChange('description', txt)}
+            onChangeText={(txt) => handleInputChange("description", txt)}
             error={uploadErrors.description}
           />
         </Form>
@@ -103,10 +98,8 @@ const Upload = ({navigation}) => {
   );
 };
 
-
 Upload.propTypes = {
   navigation: PropTypes.object,
 };
-
 
 export default Upload;
