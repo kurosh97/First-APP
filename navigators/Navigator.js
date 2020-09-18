@@ -1,13 +1,14 @@
-import React, { useContext } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "../views/Home";
-import Profile from "../views/Profile";
-import Single from "../views/Single";
-import Login from "../views/Login";
-import { AuthContext } from "../contexts/AuthContext";
-import Upload from "../views/Upload";
+import React, {useContext} from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+import Home from '../views/Home';
+import Profile from '../views/Profile';
+import Single from '../views/Single';
+import Login from '../views/Login';
+// eslint-disable-next-line quotes
+import {AuthContext} from "../contexts/AuthContext";
+import Upload from '../views/Upload';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,7 +24,7 @@ const TabScreen = () => {
 };
 
 const StackScreen = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const {isLoggedIn} = useContext(AuthContext);
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
