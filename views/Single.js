@@ -1,31 +1,38 @@
-import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import PropTypes from 'prop-types';
+/* eslint-disable operator-linebreak */
+/* eslint-disable object-curly-spacing */
+/* eslint-disable quotes */
+/* eslint-disable indent */
+import React, { useEffect, useState } from "react";
+import { Image } from "react-native";
+import PropTypes from "prop-types";
 import {
   Card,
   CardItem,
   Left,
   Icon,
-  Title,
   Text,
   Content,
   Container,
-} from 'native-base';
-import {Video} from 'expo-av';
-import {getUser} from '../hooks/APIhooks';
-import AsyncStorage from '@react-native-community/async-storage';
-import * as ScreenOrientation from 'expo-screen-orientation';
+} from "native-base";
+import { Video } from "expo-av";
+import { getUser } from "../hooks/APIhooks";
+import AsyncStorage from "@react-native-community/async-storage";
+import * as ScreenOrientation from "expo-screen-orientation";
 
-const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
+const mediaUrl = "http://media.mw.metropolia.fi/wbma/uploads/";
 
-const Single = ({route}) => {
+const Single = ({ route }) => {
   const [error, setError] = useState(false);
   const [owner, setOwner] = useState({});
   const [videoRef, setVideoRef] = useState(null);
-  const {file} = route.params;
+  const { file } = route.params;
 
   const handleVideoRef = (component) => {
     setVideoRef(component);
+  };
+
+  const showVideoInFullscreen = () => {
+    videoRef.presentFullscreenPlayer();
   };
 
   const unlock = async () => {
@@ -39,7 +46,7 @@ const Single = ({route}) => {
   };
 
   const fetchOwner = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
+    const userToken = await AsyncStorage.getItem("userToken");
     setOwner(await getUser(file.user_id, userToken));
   };
 
@@ -47,58 +54,61 @@ const Single = ({route}) => {
     unlock();
     fetchOwner();
 
+    ScreenOrientation.addOrientationChangeListener((evt) => {
+      console.log("orientation", evt);
+      if (evt.orientationInfo.orientation > 2) {
+        showVideoInFullscreen();
+      }
+    });
+
     return () => {
       lock();
     };
   }, []);
 
-  console.log('kuva', mediaUrl + file.filename);
+  console.log("kuva", mediaUrl + file.filename);
   return (
     <Container>
       <Content padder>
         <Card>
           <CardItem>
             <Left>
-              <Icon name={'image'} />
+              <Icon name={"image"} />
               <Text>{file.title}</Text>
             </Left>
           </CardItem>
           <CardItem cardBody>
             <>
-              {file.media_type === 'image' ?
+              {file.media_type === "image" ? (
                 <Image
-                  source={{uri: mediaUrl + file.filename}}
-                  style={{height: 400, width: null, flex: 1}}
-                /> :
+                  source={{ uri: mediaUrl + file.filename }}
+                  style={{ height: 400, width: null, flex: 1 }}
+                />
+              ) : (
                 <Video
                   ref={handleVideoRef}
                   source={{
-                    uri:
-                      error ? 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' :
-                        mediaUrl + file.filename,
+                    uri: error
+                      ? "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+                      : mediaUrl + file.filename,
                   }}
-                  style={{height: 400, width: null, flex: 1}}
+                  style={{ height: 400, width: null, flex: 1 }}
                   useNativeControls={true}
                   onError={(err) => {
-                    console.log('video error', err);
+                    console.log("video error", err);
                     setError(true);
                   }}
                 />
-              }
+              )}
             </>
           </CardItem>
-          <CardItem style={{flexDirection: 'column'}}>
-            <Text>
-              {file.description}
-            </Text>
-            <Text>
-              By: {owner.username}
-            </Text>
+          <CardItem style={{ flexDirection: "column" }}>
+            <Text>{file.description}</Text>
+            <Text>By: {owner.username}</Text>
           </CardItem>
         </Card>
       </Content>
     </Container>
-
   );
 };
 
