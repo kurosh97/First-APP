@@ -2,7 +2,7 @@ import axios from 'axios';
 import {useState, useEffect} from 'react';
 
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
-const appIdentifier = 'Plant-App';
+const appIdentifier = 'masanID12345';
 
 const useLoadMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -160,6 +160,28 @@ const postTag = async (tag, token) => {
   // http://media.mw.metropolia.fi/wbma/docs/#api-Tag-PostTag
 };
 
+// get user info
+const getUser = async (id, token) => {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+  };
+  try {
+    const response = await fetch(apiUrl + 'users/' + id, options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+  // http://media.mw.metropolia.fi/wbma/docs/#api-Tag-PostTag
+};
+
 export {
   useLoadMedia,
   postLogIn,
@@ -169,5 +191,6 @@ export {
   checkAvailable,
   upload,
   postTag,
+  getUser,
   appIdentifier,
 };

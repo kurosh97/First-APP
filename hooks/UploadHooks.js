@@ -1,3 +1,6 @@
+/* eslint-disable object-curly-spacing */
+/* eslint-disable indent */
+/* eslint-disable quotes */
 /* eslint-disable max-len */
 import { useState } from "react";
 import { validator } from "../utils/validator";
@@ -50,9 +53,10 @@ const useUploadForm = (callback) => {
   const validateOnSend = () => {
     const titleError = validator("title", inputs.title, constraints);
     const descriptionError = validator(
+      // eslint-disable-next-line quotes
       "description",
       inputs.description,
-      constraints
+      constraints,
     );
     if (titleError !== null || descriptionError !== null) {
       return false;

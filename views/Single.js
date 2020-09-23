@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -6,15 +6,52 @@ import {
   CardItem,
   Left,
   Icon,
+  Title,
   Text,
   Content,
   Container,
 } from 'native-base';
+import {Video} from 'expo-av';
+import {getUser} from '../hooks/APIhooks';
+import AsyncStorage from '@react-native-community/async-storage';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const Single = ({route}) => {
+  const [error, setError] = useState(false);
+  const [owner, setOwner] = useState({});
+  const [videoRef, setVideoRef] = useState(null);
   const {file} = route.params;
+
+  const handleVideoRef = (component) => {
+    setVideoRef(component);
+  };
+
+  const unlock = async () => {
+    await ScreenOrientation.unlockAsync();
+  };
+
+  const lock = async () => {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP,
+    );
+  };
+
+  const fetchOwner = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    setOwner(await getUser(file.user_id, userToken));
+  };
+
+  useEffect(() => {
+    unlock();
+    fetchOwner();
+
+    return () => {
+      lock();
+    };
+  }, []);
+
   console.log('kuva', mediaUrl + file.filename);
   return (
     <Container>
@@ -27,13 +64,35 @@ const Single = ({route}) => {
             </Left>
           </CardItem>
           <CardItem cardBody>
-            <Image source={{uri: mediaUrl + file.filename}}
-              style={{height: 400, width: null, flex: 1}}
-            />
+            <>
+              {file.media_type === 'image' ?
+                <Image
+                  source={{uri: mediaUrl + file.filename}}
+                  style={{height: 400, width: null, flex: 1}}
+                /> :
+                <Video
+                  ref={handleVideoRef}
+                  source={{
+                    uri:
+                      error ? 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' :
+                        mediaUrl + file.filename,
+                  }}
+                  style={{height: 400, width: null, flex: 1}}
+                  useNativeControls={true}
+                  onError={(err) => {
+                    console.log('video error', err);
+                    setError(true);
+                  }}
+                />
+              }
+            </>
           </CardItem>
-          <CardItem>
+          <CardItem style={{flexDirection: 'column'}}>
             <Text>
               {file.description}
+            </Text>
+            <Text>
+              By: {owner.username}
             </Text>
           </CardItem>
         </Card>
