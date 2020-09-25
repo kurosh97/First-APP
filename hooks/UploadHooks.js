@@ -1,27 +1,24 @@
-/* eslint-disable object-curly-spacing */
-/* eslint-disable indent */
-/* eslint-disable quotes */
 /* eslint-disable max-len */
-import { useState } from "react";
-import { validator } from "../utils/validator";
+import {useState} from 'react';
+import {validator} from '../utils/validator';
 
 const constraints = {
   title: {
     presence: {
-      message: "Cannot be empty.",
+      message: 'Cannot be empty.',
     },
     length: {
       minimum: 3,
-      message: "needs to be at least 3 characters.",
+      message: 'needs to be at least 3 characters.',
     },
   },
   description: {
     presence: {
-      message: "Cannot be empty.",
+      message: 'Cannot be empty.',
     },
     length: {
       minimum: 5,
-      message: "needs to be at least 5 characters.",
+      message: 'needs to be at least 5 characters.',
     },
   },
 };
@@ -29,8 +26,8 @@ const constraints = {
 const useUploadForm = (callback) => {
   const [uploadErrors, setUploadErrors] = useState({});
   const [inputs, setInputs] = useState({
-    title: "",
-    description: "",
+    title: '',
+    description: '',
   });
 
   const handleInputChange = (name, text) => {
@@ -51,13 +48,8 @@ const useUploadForm = (callback) => {
   };
 
   const validateOnSend = () => {
-    const titleError = validator("title", inputs.title, constraints);
-    const descriptionError = validator(
-      // eslint-disable-next-line quotes
-      "description",
-      inputs.description,
-      constraints,
-    );
+    const titleError = validator('title', inputs.title, constraints);
+    const descriptionError = validator('description', inputs.description, constraints);
     if (titleError !== null || descriptionError !== null) {
       return false;
     } else {
@@ -67,8 +59,8 @@ const useUploadForm = (callback) => {
 
   const reset = () => {
     setInputs({
-      title: "",
-      description: "",
+      title: '',
+      description: '',
     });
     setUploadErrors({});
   };
@@ -77,6 +69,7 @@ const useUploadForm = (callback) => {
     handleInputChange,
     validateOnSend,
     reset,
+    setInputs,
     inputs,
     uploadErrors,
   };

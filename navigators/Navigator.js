@@ -6,9 +6,10 @@ import Home from '../views/Home';
 import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
-// eslint-disable-next-line quotes
-import {AuthContext} from "../contexts/AuthContext";
+import {AuthContext} from '../contexts/AuthContext';
 import Upload from '../views/Upload';
+import MyFiles from '../views/MyFiles';
+import Modify from '../views/Modify';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -16,9 +17,9 @@ const Stack = createStackNavigator();
 const TabScreen = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="Upload" component={Upload} />
+      <Tab.Screen name='Home' component={Home} />
+      <Tab.Screen name='Profile' component={Profile} />
+      <Tab.Screen name='Upload' component={Upload} />
     </Tab.Navigator>
   );
 };
@@ -31,12 +32,14 @@ const StackScreen = () => {
         <>
           <Stack.Screen name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="MyFiles" component={MyFiles} />
+          <Stack.Screen name="Modify" component={Modify} />
         </>
       ) : (
-        <>
-          <Stack.Screen name="Login" component={Login} />
-        </>
-      )}
+          <>
+            <Stack.Screen name="Login" component={Login} />
+          </>
+        )}
     </Stack.Navigator>
   );
 };

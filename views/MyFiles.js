@@ -8,12 +8,10 @@ import List from '../components/List';
 import PropTypes from 'prop-types';
 
 
-const Home = ({navigation}) => {
-  // const {navigation} = props;
-  // const navigation = props.navigation;
+const MyFiles = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <List navigation={navigation} all />
+      <List navigation={navigation} all={false} />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -26,9 +24,9 @@ const styles = StyleSheet.create({
   },
 });
 
-Home.propTypes = {
+MyFiles.propTypes = {
   navigation: PropTypes.object,
 };
 
 
-export default Home;
+export default MyFiles;
