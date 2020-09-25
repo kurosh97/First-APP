@@ -1,78 +1,78 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
-  Dimensions,
-  StyleSheet,
+  ListItem as NBListItem,
+  Left,
+  Thumbnail,
+  Body,
   Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import PropTypes from "prop-types";
+  Right,
+  Button,
+  Icon,
+} from 'native-base';
+import {deleteFile} from '../hooks/APIhooks';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const ListItem = ({ singleMedia }) => {
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
+
+const ListItem = ({navigation, singleMedia, editable}) => {
+  const doDelete = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken');
+      const result = await deleteFile(singleMedia.file_id, userToken);
+      console.log('delete a file', result);
+      navigation.replace('MyFiles');
+      // TODO: prompt user before deleting
+      // https://reactnative.dev/docs/alert
+    }
+    catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
-    <TouchableOpacity>
-      <View style={styles.gridItem}>
-        <View style={styles.imageBox}>
-          <Image
-            style={styles.image}
-            source={{ uri: singleMedia.thumbnails.w160 }}
-          />
-        </View>
-        <View style={styles.textBox}>
-          <Text style={styles.titleText}>{singleMedia.title}</Text>
-          <Text>{singleMedia.description}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+    <NBListItem thumbnail>
+      <Left>
+        <Thumbnail
+          square
+          source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
+        />
+      </Left>
+      <Body>
+        <Text>{singleMedia.title}</Text>
+        <Text note numberOfLines={1}>{singleMedia.description}</Text>
+      </Body>
+      <Right>
+        <Button transparent onPress={
+          () => {
+            navigation.navigate('Single', {file: singleMedia});
+          }}>
+          <Icon name={'eye'}></Icon>
+          <Text>View</Text>
+        </Button>
+        {editable && <>
+          <Button success transparent onPress={
+            () => {
+              navigation.navigate('Modify', {file: singleMedia});
+            }}>
+            <Icon name={'create'}></Icon>
+            <Text>Modify</Text>
+          </Button>
+          <Button danger transparent onPress={doDelete}>
+            <Icon name={'trash'}></Icon>
+            <Text>Delete</Text>
+          </Button>
+        </>
+        }
+      </Right>
+    </NBListItem>
   );
 };
 
-const styles = StyleSheet.create({
-  gridItem: {
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "#FFE4C4",
-    marginVertical: 10,
-    shadowColor: "#F5F5DC",
-
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  imageBox: {
-    width: Dimensions.get("window").width * 0.2,
-    height: Dimensions.get("window").width * 0.2,
-    borderRadius: (Dimensions.get("window").width * 0.5) / 2,
-    borderWidth: 3,
-    borderColor: "black",
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
-  textBox: {
-    padding: 5,
-    flexDirection: "column",
-    width: "60%",
-  },
-  titleText: {
-    fontSize: 30,
-    color: "#A52A2A",
-    paddingVertical: 10,
-    fontWeight: "bold",
-  },
-});
-
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
+  editable: PropTypes.bool,
 };
 
 export default ListItem;
